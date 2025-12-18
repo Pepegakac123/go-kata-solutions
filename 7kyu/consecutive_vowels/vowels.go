@@ -11,20 +11,32 @@
 
 package kata
 
+// func GetTheVowels(word string) int {
+// 	var vowelsandConsecutivesMap = map[rune]rune{
+// 		'a': 'e',
+// 		'e': 'i',
+// 		'i': 'o',
+// 		'o': 'u',
+// 		'u': 'a',
+// 	}
+// 	vowels := 0
+// 	searchedVowel := 'a'
+// 	for _, char := range word {
+// 		if char == searchedVowel {
+// 			vowels++
+// 			searchedVowel = vowelsandConsecutivesMap[char]
+// 		}
+// 	}
+// 	return vowels
+// }
+
+// Alternative solution with string
 func GetTheVowels(word string) int {
-	var vowelsandConsecutivesMap = map[rune]rune{
-		'a': 'e',
-		'e': 'i',
-		'i': 'o',
-		'o': 'u',
-		'u': 'a',
-	}
+	var sequence string = "aeiou"
 	vowels := 0
-	searchedVowel := 'a'
 	for _, char := range word {
-		if char == searchedVowel {
+		if byte(char) == sequence[vowels%len(sequence)] {
 			vowels++
-			searchedVowel = vowelsandConsecutivesMap[char]
 		}
 	}
 	return vowels
