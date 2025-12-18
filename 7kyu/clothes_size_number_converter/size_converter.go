@@ -29,59 +29,35 @@
 // xl: 42
 package kata
 
-import "strings"
-
-var sizeMappings = map[string]int{
-	"xs": 34,
-	"s":  36,
-	"m":  38,
-	"l":  40,
-	"xl": 42,
-}
+import (
+	"strings"
+)
 
 func SizeToNumber(size string) (int, bool) {
-	trimmedSize := strings.TrimSpace(size)
-	if len(trimmedSize) <= 0 {
+	if size == "" {
 		return 0, false
 	}
-	if trimmedSize == "" {
+	base := size[len(size)-1:]
+	modifiers := size[:len(size)-1]
+	modifierslen := len(modifiers)
+
+	if strings.Count(modifiers, "x") != modifierslen {
 		return 0, false
 	}
-	if val, ok := sizeMappings[trimmedSize]; ok {
-		return val, true
-	}
-	var total int = 0
-	var valToAddOrSubtract int = 0
-	var hasModifier bool = false
-	var hasBaseSize bool = false
-	for _, char := range trimmedSize {
-		switch char {
-		case 'x':
-			valToAddOrSubtract += 2
-			hasModifier = true
-		case 's':
-			if !hasModifier {
-				return 0, false
-			}
-			total += sizeMappings["s"] - valToAddOrSubtract
-			hasBaseSize = true
-		case 'm':
-			return 0, false
-		case 'l':
-			if !hasModifier {
-				return 0, false
-			}
-			total += sizeMappings["l"] + valToAddOrSubtract
-			hasBaseSize = true
-		default:
+
+	switch base {
+	case "m":
+		if modifierslen > 0 {
 			return 0, false
 		}
-	}
-	if !hasBaseSize {
+		return 38, true
+	case "s":
+		return 36 - (modifierslen * 2), true
+
+	case "l":
+		return 40 + (modifierslen * 2), true
+
+	default:
 		return 0, false
 	}
-	if total < 0 && hasBaseSize {
-		return total, true
-	}
-	return total, true
 }
